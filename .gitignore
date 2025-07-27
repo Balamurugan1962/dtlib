@@ -1,0 +1,4 @@
+**/.pyc
+**/.DS_Store
+*.pyc
+dtlib/__pycache__/ClassificationTree.cpython-313.pyc

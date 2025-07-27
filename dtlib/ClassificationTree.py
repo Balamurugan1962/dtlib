@@ -4,7 +4,7 @@ from .DNode import DNode as dnode
 class ClassificationTree:
     # Binary Based Classification Tree
 
-    def __init__(self,maxDepth=1):
+    def __init__(self,maxDepth=10):
         self.root = None
         self.maxDepth = maxDepth
 
@@ -45,7 +45,12 @@ class ClassificationTree:
 
     def buildTree(self,root,depth):
         isLeaf = False
+
         if depth > self.maxDepth:
+            isLeaf = True
+
+
+        if root.data[0].shape[0] < self.maxSplit:
             isLeaf = True
 
         if isLeaf:
@@ -54,7 +59,6 @@ class ClassificationTree:
             predClass = 0
             if rootPurity >= 0.5:
                 predClass = 1
-
 
             return dnode(root.data,isleaf=True,predClass=predClass,_parent=root)
 
@@ -80,8 +84,19 @@ class ClassificationTree:
 
             root.right = self.buildTree(root.right,depth+1)
             root.left = self.buildTree(root.left,depth+1)
+        else:
+            X,y = root.data
+            rootPurity = len(y[y==1])/len(y)
+            predClass = 0
+            if rootPurity >= 0.5:
+                predClass = 1
+
+            root = dnode(root.data,isleaf=True,predClass=predClass,_parent=root)
 
         return root
+
+
+
 
 
 
@@ -93,7 +108,9 @@ class ClassificationTree:
 
     def predict(self,X):
         root = self.root
+
         while not root.isleaf:
+            print(root.ind,root.isleaf)
             if X[root.ind] == 0:
                 root = root.right
             else:

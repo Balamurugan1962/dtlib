@@ -1,28 +1,30 @@
 from dtlib import ClassificationTree,drawTree
 import numpy as np
+import pandas as pd
 
+df = pd.read_csv("datasets/mushrooms.csv")
+X = df.drop('class',axis=1)
 
-X_train = np.array([[1, 1, 1],
-[0, 0, 1],
- [0, 1, 0],
- [1, 0, 1],
- [1, 1, 1],
- [1, 1, 0],
- [0, 0, 0],
- [1, 1, 0],
- [0, 1, 0],
- [0, 1, 0]])
+X = pd.get_dummies(X)
+y = df['class']
+y = (y == 'e')
+columns = X.columns
 
-y_train = np.array([1, 1, 0, 0, 1, 1, 0, 1, 0, 0])
+X = np.array(X)
+y = np.array(y)
 
+X_train = X[:5000,:]
+y_train = y[:5000]
+X_test,y_test = X[5000:,:],y[5000:]
 model = ClassificationTree()
 model.fit(X_train,y_train)
-y_pred = np.zeros_like(y_train)
 
-for i in range(X_train.shape[0]):
-    y_pred[i] = (model.predict(X_train[i]))
 
-print((y_pred==y_train).sum()/y_train.shape[0] * 100)
+y_pred = np.zeros_like(y_test)
 
-# print(model.root.right.right.predClass)
-drawTree(model,["Ear Shape","Face Shape","Whiskers"])
+for i in range(X_test.shape[0]):
+    y_pred[i] = (model.predict(X_test[i]))
+
+print((y_pred==y_test).sum()/y_test.shape[0] * 100)
+
+drawTree(model,columns)
