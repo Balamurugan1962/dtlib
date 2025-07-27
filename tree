@@ -1,0 +1,15 @@
+digraph {
+	N0 [label="Ear Shape"]
+	N0 -> N1 [label=Yes]
+	N0 -> N4 [label=No]
+	N4 [label=Whiskers]
+	N4 -> N5 [label=Yes]
+	N4 -> N6 [label=No]
+	N6 [label="Class: 0" shape=rectangle]
+	N5 [label="Class: 1" shape=rectangle]
+	N1 [label="Face Shape"]
+	N1 -> N2 [label=Yes]
+	N1 -> N3 [label=No]
+	N3 [label="Class: 0" shape=rectangle]
+	N2 [label="Class: 1" shape=rectangle]
+}
